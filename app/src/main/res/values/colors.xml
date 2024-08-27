@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="day_background_color">#6F0D4C62</color> <!-- Gündüz rengi -->
+    <color name="night_background_color">#A6191970</color> <!-- Gece rengi -->
+
+
 </resources>

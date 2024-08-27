@@ -1,45 +1,126 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp">
+
+        <!-- Şehir Girişi -->
+        <EditText
+            android:id="@+id/etCityInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Şehir adı girin"
+            android:textSize="16dp"/>
+
+        <!-- Şehir Sorgula Butonu -->
+        <ImageButton
+            android:id="@+id/btnGetWeather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/baseline_search_24"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+
+
+
+
+    <!-- Şehir Adı -->
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Hava Durumu "
-        android:gravity="center"
-        android:textSize="35dp"/>
-
-    <EditText
-        android:id="@+id/cityNameInput"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:hint="Şehir ismi giriniz:" />
-
-    <Button
-        android:id="@+id/searchButton"
+        android:id="@+id/tvCityName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:text="Ara" />
+        android:text="Zocca"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_below="@id/search_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"/>
 
+    <!-- Sıcaklık -->
     <TextView
-        android:id="@+id/weatherInfo"
-        android:layout_width="match_parent"
+        android:id="@+id/tvTemperature"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="25°C"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_below="@id/tvCityName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"/>
 
-        android:paddingTop="16dp" />
-
+    <!-- Hava Durumu İkonu -->
     <ImageView
-        android:id="@+id/weatherIcon"
+        android:id="@+id/ivWeatherIcon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/tvTemperature"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/unknow" />
+
+    <!-- Hava Durumu Açıklaması -->
+    <TextView
+        android:id="@+id/tvWeatherDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:text="Hafif Yağmur"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:layout_below="@id/ivWeatherIcon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"/>
 
-</LinearLayout>
+    <!-- Diğer Hava Durumu Bilgileri -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/tvWeatherDescription"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/tvHumidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nem: 64%"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/tvWindSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rüzgar Hızı: 0.62 m/s"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/tvPressure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Basınç: 1015 hPa"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+</RelativeLayout>

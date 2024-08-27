@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.havadurumuuygulamasi.databinding.ActivityMainBinding
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val apiKey = "231d1fec17dba91b5baf5a40dfff0cfb"
-    private val cityName = "ankara"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +34,13 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        fetchWeatherData(apiKey, cityName)
+
+        binding.btnGetWeather.setOnClickListener {
+            val cityName = binding.etCityInput.text.toString()
+            if (cityName.isNotEmpty()) {
+                fetchWeatherData(apiKey, cityName)
+            }
+        }
 
 
     }
@@ -41,22 +48,68 @@ class MainActivity : AppCompatActivity() {
 
     //apiden veri çekme fonksiyonu
     private fun fetchWeatherData(apiKey: String, cityName: String) {
-
-        WeatherService.weatherApi.getCurrentWeather(cityName,apiKey).enqueue(object : Callback<WeatherResponse> {
+        WeatherService.weatherApi.getCurrentWeather(cityName, apiKey).enqueue(object : Callback<WeatherResponse> {
             override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
-
-                Log.d("kontrol",response.toString())
-
                 if (response.isSuccessful) {
-                    Log.d("kontrol",response.body()?.name.toString())
+                    val weatherResponse = response.body()
+                    Log.d("kontrol", weatherResponse?.name.toString())
+
+                    binding.tvCityName.text = weatherResponse?.name ?: "Şehir Bilinmiyor"
+
+                    // Günün zamanına göre arka planı belirle
+                    val iconCode = weatherResponse?.weather?.get(0)?.icon ?: "01d"
+                    val isDayTime = iconCode.endsWith("d")
+
+                    val backgroundDrawable = if (isDayTime) {
+                        ContextCompat.getDrawable(this@MainActivity, R.drawable.day_bg)
+                    } else {
+                        ContextCompat.getDrawable(this@MainActivity, R.drawable.night_bg)
+                    }
+
+
+                    // Hava durumu ikonu belirleme ve imageView'e set etme
+
+                    Log.d("IconCode", "Gelen iconCode: $iconCode")
+
+                   val iconResId = when (iconCode) {
+
+                        "01d" -> R.drawable.clear_day
+                        "01n" -> R.drawable.clear_night
+                        "02d" -> R.drawable.cloudy_day
+                        "02n" -> R.drawable.cloudy_night
+                        "03d","03n"-> R.drawable.cloudy
+                        "04d","04n"-> R.drawable.cloudy
+                        "09d" -> R.drawable.rainy_day
+                        "09n" -> R.drawable.rainy_night
+                        "10d" -> R.drawable.rainy3_day
+                        "10n" -> R.drawable.rainy3_night
+                        "11d" -> R.drawable.thunderstorms_day
+                        "11n" -> R.drawable.thunderstorms_night
+                        "13d" -> R.drawable.snowy_day
+                        "13n" -> R.drawable.snowy_night
+                        "50d" -> R.drawable.haze_day
+                        "50n" -> R.drawable.haze_night
+
+                        else -> R.drawable.question
+
+                    }
+
+
+                    binding.ivWeatherIcon.setImageResource(iconResId) // İkonu imageView'e set etme
+                    binding.main.setBackground(backgroundDrawable)
+                    binding.tvTemperature.text = "${weatherResponse?.main?.temp}°C"
+                    binding.tvWeatherDescription.text = weatherResponse?.weather?.get(0)?.description
+                    binding.tvHumidity.text = "Nem: ${weatherResponse?.main?.humidity}%"
+                    binding.tvWindSpeed.text = "Rüzgar Hızı: ${weatherResponse?.wind?.speed} m/s"
+                    binding.tvPressure.text = "Basınç: ${weatherResponse?.main?.pressure} hPa"
 
                 }
             }
 
             override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-                //TODO: error handler
-                Log.d("kontrol","fail")
-                }
+                Log.d("kontrol", "fail")
+            }
         })
     }
+
 }
