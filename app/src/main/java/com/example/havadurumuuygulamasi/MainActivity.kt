@@ -35,12 +35,28 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        binding.btnGetWeather.setOnClickListener {
+      /*  binding.btnGetWeather.setOnClickListener {
             val cityName = binding.etCityInput.text.toString()
             if (cityName.isNotEmpty()) {
                 fetchWeatherData(apiKey, cityName)
             }
-        }
+        }*/
+
+        // SearchView için listener ayarlama
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val cityName = query ?: return false
+                fetchWeatherData(apiKey, cityName)
+
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                //listview gelince işte alttan liste çıksın falan
+                return true
+            }
+        })
+
 
     }
 

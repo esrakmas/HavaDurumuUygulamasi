@@ -7,33 +7,16 @@
     android:padding="16dp"
     android:background="@color/white"
     tools:context=".MainActivity">
-    <LinearLayout
-        android:id="@+id/searchBar"
+
+    <SearchView
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="16dp">
-
-        <!-- Şehir Girişi -->
-        <EditText
-            android:id="@+id/etCityInput"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Şehir adı girin"
-            android:textSize="16dp"/>
-
-        <!-- Şehir Sorgula Butonu -->
-        <ImageButton
-            android:id="@+id/btnGetWeather"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/baseline_search_24"
-            android:background="@android:color/transparent"/>
-    </LinearLayout>
-
-    <!-- şehir listesi olsun -->
+        android:layout_marginTop="16dp"
+        android:queryHint="Şehir adı girin"
+        android:textSize="16sp"
+        app:iconifiedByDefault="false"/>
 
 
     <!-- Şehir Adı -->
@@ -45,7 +28,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/white"
-        android:layout_below="@id/searchBar"
+        android:layout_below="@id/searchView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"/>
 
