@@ -13,9 +13,12 @@ Kullanıcıların hava durumu verilerini almak için bu arayüzü kullanacağız
  */
 interface WeatherApi {
     @GET("weather")
+    //bu fonk main içinde kulanılacak
      fun getCurrentWeather(
-        @Query("q") q: String,
+        @Query("q") q: String, //kordinat bilgileriydi q ya dönüştürdük
         @Query("appid") apiKey: String,
-        @Query("units") units: String = "metric"
-    ):Call<WeatherResponse>
+        @Query("units") units: String = "metric" // standart Celcius alıyoda bunu // farklı birimlere de çevir
+        //lang eklersen kendi dilinde çıktı alabilirsin
+
+    ):Call<WeatherResponse> //api cevabı data class türünde olacak
 }

@@ -7,9 +7,8 @@
     android:padding="16dp"
     android:background="@color/white"
     tools:context=".MainActivity">
-
     <LinearLayout
-        android:id="@+id/search_bar"
+        android:id="@+id/searchBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -34,7 +33,7 @@
             android:background="@android:color/transparent"/>
     </LinearLayout>
 
-
+    <!-- şehir listesi olsun -->
 
 
     <!-- Şehir Adı -->
@@ -46,29 +45,55 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/white"
-        android:layout_below="@id/search_bar"
+        android:layout_below="@id/searchBar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"/>
 
-    <!-- Sıcaklık -->
+    <!-- Buraya celcius gelsin diğer değerleri altta ekliycem -->
     <TextView
-        android:id="@+id/tvTemperature"
+        android:id="@+id/tvTemperatureCelcius"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="25°C"
+        android:text="°C"
         android:textSize="48sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:layout_below="@id/tvCityName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"/>
+    <!-- Sıcaklık (Fahrenheit) -->
+    <TextView
+        android:id="@+id/tvTemperatureFahrenheit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="°F"
+        android:textSize="24sp"
+        android:textStyle="italic"
+        android:textColor="@color/black"
+        android:layout_below="@id/tvTemperatureCelcius"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"/>
+
+    <!-- Sıcaklık (Kelvin) -->
+    <TextView
+        android:id="@+id/tvTemperatureKelvin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="K"
+        android:textSize="24sp"
+        android:textStyle="italic"
+        android:textColor="@color/black"
+        android:layout_below="@id/tvTemperatureFahrenheit"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"/>
+
 
     <!-- Hava Durumu İkonu -->
     <ImageView
         android:id="@+id/ivWeatherIcon"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_below="@id/tvTemperature"
+        android:layout_below="@id/tvTemperatureKelvin"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:src="@drawable/unknow" />

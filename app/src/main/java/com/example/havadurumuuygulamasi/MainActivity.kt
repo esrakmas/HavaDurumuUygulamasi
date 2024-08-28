@@ -2,6 +2,7 @@ package com.example.havadurumuuygulamasi
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.SearchView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -34,7 +35,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-
         binding.btnGetWeather.setOnClickListener {
             val cityName = binding.etCityInput.text.toString()
             if (cityName.isNotEmpty()) {
@@ -42,13 +42,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
     }
+
 
 
     //apiden veri çekme fonksiyonu
     private fun fetchWeatherData(apiKey: String, cityName: String) {
-        WeatherService.weatherApi.getCurrentWeather(cityName, apiKey).enqueue(object : Callback<WeatherResponse> {
+        WeatherService.weatherApi.getCurrentWeather(cityName, apiKey)
+            .enqueue(object : Callback<WeatherResponse> {
+                //enqueue Metodu: Retrofit kütüphanesinde, enqueue metodu asenkron bir ağ çağrısı yapar.
+                // Bu çağrı, çalıştırıldığında sunucuya bir istek gönderir
+                // ve yanıt alındığında (bu başarı veya başarısızlık olabilir)
             override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
                 if (response.isSuccessful) {
                     val weatherResponse = response.body()
@@ -97,7 +101,18 @@ class MainActivity : AppCompatActivity() {
 
                     binding.ivWeatherIcon.setImageResource(iconResId) // İkonu imageView'e set etme
                     binding.main.setBackground(backgroundDrawable)
-                    binding.tvTemperature.text = "${weatherResponse?.main?.temp}°C"
+
+                    val tempCelsius = weatherResponse?.main?.temp
+                    if (tempCelsius != null) {
+                        binding.tvTemperatureCelcius.text = "${tempCelsius}°C"
+                        binding.tvTemperatureKelvin.text = "${tempCelsius + 273.15} K"
+                        binding.tvTemperatureFahrenheit.text = "${(tempCelsius * 9 / 5) + 32}°F"
+                    } else {
+                        binding.tvTemperatureCelcius.text = "yok"
+                        binding.tvTemperatureKelvin.text = "yok"
+                        binding.tvTemperatureFahrenheit.text = "yok"
+                    }
+
                     binding.tvWeatherDescription.text = weatherResponse?.weather?.get(0)?.description
                     binding.tvHumidity.text = "Nem: ${weatherResponse?.main?.humidity}%"
                     binding.tvWindSpeed.text = "Rüzgar Hızı: ${weatherResponse?.wind?.speed} m/s"

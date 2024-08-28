@@ -4,16 +4,17 @@ import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
 
 /*
-*response içindeki hiyerarşiyi sağladığımız basit yapı
-*
-*Uzak sunucudan bizlere dönecek json formatındaki verinin
-* çeşitli coverterlar yardımı ile cast-map edileceği sınıflar
-*
-* */
+response içindeki hiyerarşiyi sağladığımız basit yapı
+
+Uzak sunucudan bizlere dönecek json formatındaki verinin
+çeşitli coverterlar yardımı ile cast-map edileceği sınıflar
+
+**/
 
 
 
 data class WeatherResponse(
+ //alıcağımız değerler
     val coord: Coord,
     val weather: List<Weather>,
     val base: String,
@@ -37,8 +38,8 @@ data class Coord(
 data class Weather(
     val id: Long,
     val main: String,
-    val description: String,
-    val icon: String,
+    val description: String, // bunu kullanabilirim dil seçeneği eklenmiş olur
+    val icon: String, // buna da tekrar bak bi png kullandın ama svg dene
 )
 
 data class Main(
@@ -70,7 +71,7 @@ data class Clouds(
 data class Sys(
     val type: Long,
     val id: Long,
-    val country: String,
-    val sunrise: Long,
-    val sunset: Long,
+    val country: String, // ülke kodu eklenebilir
+    val sunrise: Long,  //
+    val sunset: Long,  // gün doğumju ve batımı eklenebilir
 )
