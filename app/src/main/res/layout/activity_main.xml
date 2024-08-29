@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="@color/white"
+    android:background="@drawable/day_bg"
     tools:context=".MainActivity">
 
     <SearchView
@@ -19,12 +19,12 @@
         app:iconifiedByDefault="false"/>
 
 
-    <!-- Şehir Adı -->
+
     <TextView
         android:id="@+id/tvCityName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Zocca"
+        android:text="Şehir Adı"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/white"
@@ -40,10 +40,10 @@
         android:text="°C"
         android:textSize="48sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_below="@id/tvCityName"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="10dp"/>
     <!-- Sıcaklık (Fahrenheit) -->
     <TextView
         android:id="@+id/tvTemperatureFahrenheit"
@@ -52,7 +52,7 @@
         android:text="°F"
         android:textSize="24sp"
         android:textStyle="italic"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_below="@id/tvTemperatureCelcius"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="4dp"/>
@@ -65,7 +65,7 @@
         android:text="K"
         android:textSize="24sp"
         android:textStyle="italic"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_below="@id/tvTemperatureFahrenheit"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="4dp"/>
@@ -81,19 +81,17 @@
         android:layout_marginTop="16dp"
         android:src="@drawable/unknow" />
 
-    <!-- Hava Durumu Açıklaması -->
     <TextView
         android:id="@+id/tvWeatherDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hafif Yağmur"
+        android:text="Hava Durumu Açıklaması"
         android:textSize="18sp"
         android:textColor="@color/white"
         android:layout_below="@id/ivWeatherIcon"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"/>
 
-    <!-- Diğer Hava Durumu Bilgileri -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -106,7 +104,7 @@
             android:id="@+id/tvHumidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nem: 64%"
+            android:text="Nem"
             android:textSize="16sp"
             android:textColor="@color/white"
             android:layout_marginBottom="8dp"
@@ -116,7 +114,7 @@
             android:id="@+id/tvWindSpeed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rüzgar Hızı: 0.62 m/s"
+            android:text="Rüzgar Hızı"
             android:textSize="16sp"
             android:textColor="@color/white"
             android:layout_marginBottom="8dp"
@@ -126,7 +124,7 @@
             android:id="@+id/tvPressure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Basınç: 1015 hPa"
+            android:text="Basınç"
             android:textSize="16sp"
             android:textColor="@color/white"
             android:layout_gravity="center_horizontal" />

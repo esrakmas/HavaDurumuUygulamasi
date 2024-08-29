@@ -1,5 +1,6 @@
 package com.example.havadurumuuygulamasi
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.SearchView
@@ -12,6 +13,7 @@ import com.example.havadurumuuygulamasi.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 
 
@@ -42,10 +44,35 @@ class MainActivity : AppCompatActivity() {
             }
         }*/
 
+        //yapıyı olustumak bir de veriyi kaydetmek icin editor
+        val sharedPreferences = getSharedPreferences("WeatherAppPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val lastSearchedCity = sharedPreferences.getString("lastSearchedCity", null)
+
+
+        //eğer sehir aratılmıssa önceden son arama mevcutsa
+        if (lastSearchedCity != null) {
+            binding.searchView.setQuery(lastSearchedCity, false)
+
+            // son aramaya göre vevrileri geitr
+            fetchWeatherData(apiKey, lastSearchedCity)
+        }
+
+
+
+
+
+
         // SearchView için listener ayarlama
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val cityName = query ?: return false
+
+
+              //ekranı kaydetmek icin
+                editor.putString("lastSearchedCity", cityName)
+                editor.apply()
+
                 fetchWeatherData(apiKey, cityName)
 
                 return true
@@ -120,9 +147,11 @@ class MainActivity : AppCompatActivity() {
 
                     val tempCelsius = weatherResponse?.main?.temp
                     if (tempCelsius != null) {
-                        binding.tvTemperatureCelcius.text = "${tempCelsius}°C"
-                        binding.tvTemperatureKelvin.text = "${tempCelsius + 273.15} K"
-                        binding.tvTemperatureFahrenheit.text = "${(tempCelsius * 9 / 5) + 32}°F"
+
+                        binding.tvTemperatureCelcius.text = String.format("%.1f°C", tempCelsius)
+                        binding.tvTemperatureKelvin.text = String.format("%.2f K", tempCelsius + 273.15)
+                        binding.tvTemperatureFahrenheit.text = String.format("%.2f°F", (tempCelsius * 9 / 5) + 32)
+
                     } else {
                         binding.tvTemperatureCelcius.text = "yok"
                         binding.tvTemperatureKelvin.text = "yok"
