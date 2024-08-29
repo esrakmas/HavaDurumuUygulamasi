@@ -16,9 +16,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-
-
-
 class MainActivity : AppCompatActivity() {
 
 
@@ -45,22 +42,6 @@ class MainActivity : AppCompatActivity() {
         val lastSearchedCity = sharedPreferences.getString("lastSearchedCity", null)
 
 
-
-
-        //eğer sehir aratılmıssa önceden son arama mevcutsa
-        if (lastSearchedCity != null) {
-            binding.searchView.setQuery(lastSearchedCity, false)
-
-            // son aramaya göre vevrileri geitr
-            fetchWeatherData(apiKey, lastSearchedCity)
-        }
-
-
-
-
-
-
-        // SearchView için listener ayarlama
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val cityName = query ?: return false
@@ -71,6 +52,8 @@ class MainActivity : AppCompatActivity() {
                 editor.apply()
 
                 fetchWeatherData(apiKey, cityName)
+                updateRecentCitiesList(cityName)
+                showRecentCitiesInConsole()
 
                 return true
             }
@@ -82,24 +65,79 @@ class MainActivity : AppCompatActivity() {
         })
 
 
-  //kalvye kapansın diye
-        binding.main.setOnTouchListener {view, event ->
+        //eğer sehir aratılmıssa önceden son arama mevcutsa
+        if (lastSearchedCity != null) {
+            binding.searchView.setQuery(lastSearchedCity, false)
+
+            // son aramaya göre vevrileri geitr
+            fetchWeatherData(apiKey, lastSearchedCity)
+        }
+
+        //kalvye kapansın diyr
+        binding.main.setOnTouchListener { view, event ->
             // arama kutusunu temizle
             binding.searchView.setQuery("", false)
             binding.searchView.clearFocus()
             // kalvyeyi kapa
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(binding.main.windowToken, 0)
 
             false
         }
+    }
 
+    private fun updateRecentCitiesList(cityName: String) {
+        val sharedPreferences = getSharedPreferences("WeatherAppPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
 
+        //  son 3 liste
+        val recentCitiesString = sharedPreferences.getString("recentCities", null)
+
+        if (!recentCitiesString.isNullOrEmpty()) {
+            // stringi virgüle göre ayır ve liste döner virgül zorunlu dğeil
+            val recentCities: ArrayList<String> =
+                recentCitiesString.split(",").map { it.trim() } as ArrayList
+
+            if (!recentCities.contains(cityName)) {
+                if (recentCities.size > 2) {
+                    recentCities.removeAt(2)
+                }
+                recentCities.add(0, cityName)
+                // kaydet
+                editor.putString("recentCities", recentCities.joinToString(","))
+                editor.apply()
+            }
+        } else {
+            // kaydet
+            editor.putString("recentCities", cityName)
+            editor.apply()
+        }
 
 
     }
 
+    private fun getRecentCities(): List<String> {
+        val sharedPreferences = getSharedPreferences("WeatherAppPrefs", Context.MODE_PRIVATE)
+        val recentCitiesString = sharedPreferences.getString("recentCities", null)
 
+
+        return if (!recentCitiesString.isNullOrEmpty()) {
+            recentCitiesString.split(",").map { it.trim() }
+
+        } else {
+            listOf()
+        }
+
+
+    }
+
+    private fun showRecentCitiesInConsole() {
+        val recentCities = getRecentCities()
+
+        // Konsolda göstermek için
+        Log.d("RecentCities", "Son uc sehir : ${recentCities.joinToString(", ")}")
+    }
 
     //apiden veri çekme fonksiyonu
     private fun fetchWeatherData(apiKey: String, cityName: String) {
@@ -108,7 +146,10 @@ class MainActivity : AppCompatActivity() {
                 //enqueue Metodu: Retrofit kütüphanesinde, enqueue metodu asenkron bir ağ çağrısı yapar.
                 // Bu çağrı, çalıştırıldığında sunucuya bir istek gönderir
                 // ve yanıt alındığında (bu başarı veya başarısızlık olabilir)
-                override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
+                override fun onResponse(
+                    call: Call<WeatherResponse>,
+                    response: Response<WeatherResponse>
+                ) {
                     if (response.isSuccessful) {
                         val weatherResponse = response.body()
                         Log.d("kontrol", weatherResponse?.name.toString())
@@ -132,12 +173,12 @@ class MainActivity : AppCompatActivity() {
 
                         val iconResId = when (iconCode) {
 
-                            "01d" -> R.drawable.sun
+                            "01d" -> R.drawable.clear_day
                             "01n" -> R.drawable.moon
                             "02d" -> R.drawable.cloudy_day
                             "02n" -> R.drawable.cloudy_night
-                            "03d","03n"-> R.drawable.cloudy
-                            "04d","04n"-> R.drawable.cloudy
+                            "03d", "03n" -> R.drawable.cloudy
+                            "04d", "04n" -> R.drawable.cloudy
                             "09d" -> R.drawable.rainy_day
                             "09n" -> R.drawable.rainy_night
                             "10d" -> R.drawable.rainy3_day
@@ -161,8 +202,10 @@ class MainActivity : AppCompatActivity() {
                         if (tempCelsius != null) {
 
                             binding.tvTemperatureCelcius.text = String.format("%.1f°C", tempCelsius)
-                            binding.tvTemperatureKelvin.text = String.format("%.2f K", tempCelsius + 273.15)
-                            binding.tvTemperatureFahrenheit.text = String.format("%.2f°F", (tempCelsius * 9 / 5) + 32)
+                            binding.tvTemperatureKelvin.text =
+                                String.format("%.2f K", tempCelsius + 273.15)
+                            binding.tvTemperatureFahrenheit.text =
+                                String.format("%.2f°F", (tempCelsius * 9 / 5) + 32)
 
                         } else {
                             binding.tvTemperatureCelcius.text = "yok"
@@ -170,9 +213,11 @@ class MainActivity : AppCompatActivity() {
                             binding.tvTemperatureFahrenheit.text = "yok"
                         }
 
-                        binding.tvWeatherDescription.text = weatherResponse?.weather?.get(0)?.description
+                        binding.tvWeatherDescription.text =
+                            weatherResponse?.weather?.get(0)?.description
                         binding.tvHumidity.text = "Nem: ${weatherResponse?.main?.humidity}%"
-                        binding.tvWindSpeed.text = "Rüzgar Hızı: ${weatherResponse?.wind?.speed} m/s"
+                        binding.tvWindSpeed.text =
+                            "Rüzgar Hızı: ${weatherResponse?.wind?.speed} m/s"
                         binding.tvPressure.text = "Basınç: ${weatherResponse?.main?.pressure} hPa"
 
                     }
