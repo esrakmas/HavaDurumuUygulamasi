@@ -3,6 +3,7 @@ package com.example.havadurumuuygulamasi
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import androidx.activity.enableEdgeToEdge
@@ -69,8 +70,10 @@ class MainActivity : AppCompatActivity() {
         if (lastSearchedCity != null) {
             binding.searchView.setQuery(lastSearchedCity, false)
 
+
             // son aramaya göre vevrileri geitr
             fetchWeatherData(apiKey, lastSearchedCity)
+
         }
 
         //kalvye kapansın diyr
@@ -220,7 +223,13 @@ class MainActivity : AppCompatActivity() {
                             "Rüzgar Hızı: ${weatherResponse?.wind?.speed} m/s"
                         binding.tvPressure.text = "Basınç: ${weatherResponse?.main?.pressure} hPa"
 
+                        //veriler gelince layout görünürlüğü aç tv kaldır
+                        binding.weatherData.visibility=View.VISIBLE
+                        binding.tvPromptMessage.visibility=View.GONE
+
                     }
+
+
                 }
 
                 override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {

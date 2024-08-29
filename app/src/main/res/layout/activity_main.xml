@@ -16,126 +16,138 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/searcviwe_bg"
         android:queryHint="Şehir adı girin"
         android:textSize="16sp"
-        app:iconifiedByDefault="false"
-        >
+        app:iconifiedByDefault="false">
 
     </SearchView>
 
-
-
     <TextView
-        android:id="@+id/tvCityName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:layout_below="@id/searchView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
-
-    <!-- Buraya celcius gelsin diğer değerleri altta ekliycem -->
-    <TextView
-        android:id="@+id/tvTemperatureCelcius"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="°C"
-        android:textSize="48sp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:layout_below="@id/tvCityName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        />
-    <!-- Sıcaklık (Fahrenheit) -->
-    <TextView
-        android:id="@+id/tvTemperatureFahrenheit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="°F"
-        android:textSize="24sp"
-        android:textStyle="italic"
-        android:textColor="@color/white"
-        android:layout_below="@id/tvTemperatureCelcius"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"/>
-
-    <!-- Sıcaklık (Kelvin) -->
-    <TextView
-        android:id="@+id/tvTemperatureKelvin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="K"
-        android:textSize="24sp"
-        android:textStyle="italic"
-        android:textColor="@color/white"
-        android:layout_below="@id/tvTemperatureFahrenheit"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"/>
-
-
-    <!-- Hava Durumu İkonu -->
-    <ImageView
-        android:id="@+id/ivWeatherIcon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_below="@id/tvTemperatureKelvin"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        />
-
-    <TextView
-        android:id="@+id/tvWeatherDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hava Durumu Açıklaması"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:layout_below="@id/ivWeatherIcon"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"/>
-
-    <LinearLayout
+        android:id="@+id/tvPromptMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Henüz bir şehir aramadınız.\nLütfen bir şehir adı girin."
+        android:textSize="16sp"
+        android:textColor="#B2FFFFFF"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="80dp"
+        android:layout_below="@id/searchView"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
+        android:padding="16dp" />
+
+    <LinearLayout
+        android:id="@+id/weatherData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchView"
+        android:layout_marginTop="80dp"
         android:orientation="vertical"
-        android:layout_below="@id/tvWeatherDescription"
-        android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true">
+        android:visibility="invisible"
+        tools:visibility="invisible">
 
         <TextView
-            android:id="@+id/tvHumidity"
+            android:id="@+id/tvCityName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nem"
-            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="sehir ismi"
             android:textColor="@color/white"
-            android:layout_marginBottom="8dp"
-            android:layout_gravity="center_horizontal" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvWindSpeed"
+            android:id="@+id/tvTemperatureCelcius"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rüzgar Hızı"
-            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="°C"
             android:textColor="@color/white"
-            android:layout_marginBottom="8dp"
-            android:layout_gravity="center_horizontal" />
+            android:textSize="48sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvPressure"
+            android:id="@+id/tvTemperatureFahrenheit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Basınç"
-            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:text="°F"
             android:textColor="@color/white"
-            android:layout_gravity="center_horizontal" />
+            android:textSize="24sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/tvTemperatureKelvin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:text="K"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="italic" />
+
+        <ImageView
+            android:id="@+id/ivWeatherIcon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/tvWeatherDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Hava Durumu Açıklaması"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+
+            >
+
+            <TextView
+                android:id="@+id/tvHumidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="8dp"
+                android:text="Nem"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvWindSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="8dp"
+                android:text="Rüzgar Hızı"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvPressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Basınç"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
     </LinearLayout>
+
 </RelativeLayout>
