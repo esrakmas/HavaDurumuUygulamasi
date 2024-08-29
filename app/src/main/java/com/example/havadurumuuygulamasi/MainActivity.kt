@@ -3,6 +3,7 @@ package com.example.havadurumuuygulamasi
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -44,10 +45,6 @@ class MainActivity : AppCompatActivity() {
         val lastSearchedCity = sharedPreferences.getString("lastSearchedCity", null)
 
 
-        //son 3 veriyi göstermek icin
-        val sharedPreferences2 = getSharedPreferences("WeatherAppPrefs", Context.MODE_PRIVATE)
-        val editor2 = sharedPreferences.edit()
-        val last3SearchedCity = sharedPreferences.getString("lastSearchedCity", null)
 
 
         //eğer sehir aratılmıssa önceden son arama mevcutsa
@@ -69,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 val cityName = query ?: return false
 
 
-              //ekranı kaydetmek icin
+                //ekranı kaydetmek icin
                 editor.putString("lastSearchedCity", cityName)
                 editor.apply()
 
@@ -85,6 +82,21 @@ class MainActivity : AppCompatActivity() {
         })
 
 
+  //kalvye kapansın diye
+        binding.main.setOnTouchListener {view, event ->
+            // arama kutusunu temizle
+            binding.searchView.setQuery("", false)
+            binding.searchView.clearFocus()
+            // kalvyeyi kapa
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(binding.main.windowToken, 0)
+
+            false
+        }
+
+
+
+
     }
 
 
@@ -96,80 +108,80 @@ class MainActivity : AppCompatActivity() {
                 //enqueue Metodu: Retrofit kütüphanesinde, enqueue metodu asenkron bir ağ çağrısı yapar.
                 // Bu çağrı, çalıştırıldığında sunucuya bir istek gönderir
                 // ve yanıt alındığında (bu başarı veya başarısızlık olabilir)
-            override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
-                if (response.isSuccessful) {
-                    val weatherResponse = response.body()
-                    Log.d("kontrol", weatherResponse?.name.toString())
+                override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
+                    if (response.isSuccessful) {
+                        val weatherResponse = response.body()
+                        Log.d("kontrol", weatherResponse?.name.toString())
 
-                    binding.tvCityName.text = weatherResponse?.name ?: "Şehir Bilinmiyor"
+                        binding.tvCityName.text = weatherResponse?.name ?: "Şehir Bilinmiyor"
 
-                    // Günün zamanına göre arka planı belirle
-                    val iconCode = weatherResponse?.weather?.get(0)?.icon ?: "01d"
-                    val isDayTime = iconCode.endsWith("d")
+                        // Günün zamanına göre arka planı belirle
+                        val iconCode = weatherResponse?.weather?.get(0)?.icon ?: "01d"
+                        val isDayTime = iconCode.endsWith("d")
 
-                    val backgroundDrawable = if (isDayTime) {
-                        ContextCompat.getDrawable(this@MainActivity, R.drawable.day_bg)
-                    } else {
-                        ContextCompat.getDrawable(this@MainActivity, R.drawable.night_bg)
+                        val backgroundDrawable = if (isDayTime) {
+                            ContextCompat.getDrawable(this@MainActivity, R.drawable.day_bg)
+                        } else {
+                            ContextCompat.getDrawable(this@MainActivity, R.drawable.night_bg)
+                        }
+
+
+                        // Hava durumu ikonu belirleme ve imageView'e set etme
+
+                        Log.d("IconCode", "Gelen iconCode: $iconCode")
+
+                        val iconResId = when (iconCode) {
+
+                            "01d" -> R.drawable.sun
+                            "01n" -> R.drawable.moon
+                            "02d" -> R.drawable.cloudy_day
+                            "02n" -> R.drawable.cloudy_night
+                            "03d","03n"-> R.drawable.cloudy
+                            "04d","04n"-> R.drawable.cloudy
+                            "09d" -> R.drawable.rainy_day
+                            "09n" -> R.drawable.rainy_night
+                            "10d" -> R.drawable.rainy3_day
+                            "10n" -> R.drawable.rainy3_night
+                            "11d" -> R.drawable.thunderstorms_day
+                            "11n" -> R.drawable.thunderstorms_night
+                            "13d" -> R.drawable.snowy_day
+                            "13n" -> R.drawable.snowy_night
+                            "50d" -> R.drawable.haze_day
+                            "50n" -> R.drawable.haze_night
+
+                            else -> R.drawable.question
+
+                        }
+
+
+                        binding.ivWeatherIcon.setImageResource(iconResId) // İkonu imageView'e set etme
+                        binding.main.setBackground(backgroundDrawable)
+
+                        val tempCelsius = weatherResponse?.main?.temp
+                        if (tempCelsius != null) {
+
+                            binding.tvTemperatureCelcius.text = String.format("%.1f°C", tempCelsius)
+                            binding.tvTemperatureKelvin.text = String.format("%.2f K", tempCelsius + 273.15)
+                            binding.tvTemperatureFahrenheit.text = String.format("%.2f°F", (tempCelsius * 9 / 5) + 32)
+
+                        } else {
+                            binding.tvTemperatureCelcius.text = "yok"
+                            binding.tvTemperatureKelvin.text = "yok"
+                            binding.tvTemperatureFahrenheit.text = "yok"
+                        }
+
+                        binding.tvWeatherDescription.text = weatherResponse?.weather?.get(0)?.description
+                        binding.tvHumidity.text = "Nem: ${weatherResponse?.main?.humidity}%"
+                        binding.tvWindSpeed.text = "Rüzgar Hızı: ${weatherResponse?.wind?.speed} m/s"
+                        binding.tvPressure.text = "Basınç: ${weatherResponse?.main?.pressure} hPa"
+
                     }
-
-
-                    // Hava durumu ikonu belirleme ve imageView'e set etme
-
-                    Log.d("IconCode", "Gelen iconCode: $iconCode")
-
-                   val iconResId = when (iconCode) {
-
-                        "01d" -> R.drawable.sun
-                        "01n" -> R.drawable.moon
-                        "02d" -> R.drawable.cloudy_day
-                        "02n" -> R.drawable.cloudy_night
-                        "03d","03n"-> R.drawable.cloudy
-                        "04d","04n"-> R.drawable.cloudy
-                        "09d" -> R.drawable.rainy_day
-                        "09n" -> R.drawable.rainy_night
-                        "10d" -> R.drawable.rainy3_day
-                        "10n" -> R.drawable.rainy3_night
-                        "11d" -> R.drawable.thunderstorms_day
-                        "11n" -> R.drawable.thunderstorms_night
-                        "13d" -> R.drawable.snowy_day
-                        "13n" -> R.drawable.snowy_night
-                        "50d" -> R.drawable.haze_day
-                        "50n" -> R.drawable.haze_night
-
-                        else -> R.drawable.question
-
-                    }
-
-
-                    binding.ivWeatherIcon.setImageResource(iconResId) // İkonu imageView'e set etme
-                    binding.main.setBackground(backgroundDrawable)
-
-                    val tempCelsius = weatherResponse?.main?.temp
-                    if (tempCelsius != null) {
-
-                        binding.tvTemperatureCelcius.text = String.format("%.1f°C", tempCelsius)
-                        binding.tvTemperatureKelvin.text = String.format("%.2f K", tempCelsius + 273.15)
-                        binding.tvTemperatureFahrenheit.text = String.format("%.2f°F", (tempCelsius * 9 / 5) + 32)
-
-                    } else {
-                        binding.tvTemperatureCelcius.text = "yok"
-                        binding.tvTemperatureKelvin.text = "yok"
-                        binding.tvTemperatureFahrenheit.text = "yok"
-                    }
-
-                    binding.tvWeatherDescription.text = weatherResponse?.weather?.get(0)?.description
-                    binding.tvHumidity.text = "Nem: ${weatherResponse?.main?.humidity}%"
-                    binding.tvWindSpeed.text = "Rüzgar Hızı: ${weatherResponse?.wind?.speed} m/s"
-                    binding.tvPressure.text = "Basınç: ${weatherResponse?.main?.pressure} hPa"
-
                 }
-            }
 
-            override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
-                Log.d("kontrol", "fail")
-            }
-        })
+                override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                    Log.d("kontrol", "fail")
+                }
+            })
     }
 
 }

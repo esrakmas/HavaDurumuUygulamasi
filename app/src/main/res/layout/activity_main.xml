@@ -21,7 +21,9 @@
         android:background="@drawable/searcviwe_bg"
         android:queryHint="Şehir adı girin"
         android:textSize="16sp"
-        app:iconifiedByDefault="false" />
+        app:iconifiedByDefault="false" >
+
+    </SearchView>
 
 
 
