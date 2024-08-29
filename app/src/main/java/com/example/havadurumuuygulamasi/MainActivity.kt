@@ -37,17 +37,17 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-      /*  binding.btnGetWeather.setOnClickListener {
-            val cityName = binding.etCityInput.text.toString()
-            if (cityName.isNotEmpty()) {
-                fetchWeatherData(apiKey, cityName)
-            }
-        }*/
 
         //yapıyı olustumak bir de veriyi kaydetmek icin editor
         val sharedPreferences = getSharedPreferences("WeatherAppPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         val lastSearchedCity = sharedPreferences.getString("lastSearchedCity", null)
+
+
+        //son 3 veriyi göstermek icin
+        val sharedPreferences2 = getSharedPreferences("WeatherAppPrefs", Context.MODE_PRIVATE)
+        val editor2 = sharedPreferences.edit()
+        val last3SearchedCity = sharedPreferences.getString("lastSearchedCity", null)
 
 
         //eğer sehir aratılmıssa önceden son arama mevcutsa
@@ -120,8 +120,8 @@ class MainActivity : AppCompatActivity() {
 
                    val iconResId = when (iconCode) {
 
-                        "01d" -> R.drawable.clear_day
-                        "01n" -> R.drawable.clear_night
+                        "01d" -> R.drawable.sun
+                        "01n" -> R.drawable.moon
                         "02d" -> R.drawable.cloudy_day
                         "02n" -> R.drawable.cloudy_night
                         "03d","03n"-> R.drawable.cloudy
