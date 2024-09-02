@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.SearchView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
 
     private val apiKey = "231d1fec17dba91b5baf5a40dfff0cfb"
 
+    private lateinit var suggestionsAdapter: ArrayAdapter<String>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +39,22 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-
         //yapıyı olustumak bir de veriyi kaydetmek icin editor
         val sharedPreferences = getSharedPreferences("WeatherAppPrefs", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         val lastSearchedCity = sharedPreferences.getString("lastSearchedCity", null)
+
+
+
+        // Öneri listesini oluştur
+        //ArrayAdapter(Context context, int resource, List<T> objects)
+        suggestionsAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1,
+            getRecentCities()
+        )
+        //listview e adapteri bağla
+        binding.suggestionsListView.adapter = suggestionsAdapter
 
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -56,14 +70,34 @@ class MainActivity : AppCompatActivity() {
                 updateRecentCitiesList(cityName)
                 showRecentCitiesInConsole()
 
+                binding.suggestionsListView.visibility = View.GONE
+
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 //listview gelince işte alttan liste çıksın falan
+
+                if (newText.isNullOrEmpty()) {
+                    //öneri yoksa da görünmesin
+                    binding.suggestionsListView.visibility = View.GONE
+                } else {
+                    updateSuggestions(newText)
+                }
                 return true
             }
         })
+
+        //öneriye bastığımda searhviewde yerini alsın ve liste kapansın
+        binding.suggestionsListView.setOnItemClickListener { parent, view, position, id ->
+           //parent.getItemAtPosition(position):tıklanan ögenin verisini al stringe dönüşütr
+            val selectedCity = parent.getItemAtPosition(position) as String
+          //searchview sorgusunu selectedCity olarak ayarlıyor ve true ile arma işlemini başlat
+            binding.searchView.setQuery(selectedCity, true)
+            binding.suggestionsListView.visibility = View.GONE
+        }
+
+
 
 
         //eğer sehir aratılmıssa önceden son arama mevcutsa
@@ -89,6 +123,31 @@ class MainActivity : AppCompatActivity() {
             false
         }
     }
+
+
+
+
+
+    private fun updateSuggestions(newText: String) {
+        val filteredCities = getRecentCities().filter {
+            it.contains(newText, ignoreCase = true)
+        }
+
+        if (filteredCities.isNotEmpty()) {
+            suggestionsAdapter.clear()
+            suggestionsAdapter.addAll(filteredCities)
+            suggestionsAdapter.notifyDataSetChanged()
+            binding.suggestionsListView.visibility = View.VISIBLE
+        } else {
+            binding.suggestionsListView.visibility = View.GONE
+        }
+    }
+
+
+
+
+
+
 
     private fun updateRecentCitiesList(cityName: String) {
         val sharedPreferences = getSharedPreferences("WeatherAppPrefs", Context.MODE_PRIVATE)

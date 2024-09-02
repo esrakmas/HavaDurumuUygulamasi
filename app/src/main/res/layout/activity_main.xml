@@ -26,6 +26,17 @@
 
     </SearchView>
 
+    <ListView
+        android:id="@+id/suggestionsListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchView"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/listview_bg"
+        android:divider="@android:color/transparent"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/tvPromptMessage"
         android:layout_width="match_parent"
