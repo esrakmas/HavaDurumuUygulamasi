@@ -20,13 +20,9 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
-
     private lateinit var binding: ActivityMainBinding
-
     private val apiKey = "231d1fec17dba91b5baf5a40dfff0cfb"
-
     private lateinit var suggestionsAdapter: ArrayAdapter<String>
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +40,6 @@ class MainActivity : AppCompatActivity() {
         val editor = sharedPreferences.edit()
         val lastSearchedCity = sharedPreferences.getString("lastSearchedCity", null)
 
-
-
         // Öneri listesini oluştur
         //ArrayAdapter(Context context, int resource, List<T> objects)
         suggestionsAdapter = ArrayAdapter(
@@ -56,11 +50,9 @@ class MainActivity : AppCompatActivity() {
         //listview e adapteri bağla
         binding.suggestionsListView.adapter = suggestionsAdapter
 
-
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val cityName = query ?: return false
-
 
                 //ekranı kaydetmek icin
                 editor.putString("lastSearchedCity", cityName)
@@ -90,15 +82,12 @@ class MainActivity : AppCompatActivity() {
 
         //öneriye bastığımda searhviewde yerini alsın ve liste kapansın
         binding.suggestionsListView.setOnItemClickListener { parent, view, position, id ->
-           //parent.getItemAtPosition(position):tıklanan ögenin verisini al stringe dönüşütr
+            //parent.getItemAtPosition(position):tıklanan ögenin verisini al stringe dönüşütr
             val selectedCity = parent.getItemAtPosition(position) as String
-          //searchview sorgusunu selectedCity olarak ayarlıyor ve true ile arma işlemini başlat
+            //searchview sorgusunu selectedCity olarak ayarlıyor ve true ile arma işlemini başlat
             binding.searchView.setQuery(selectedCity, true)
             binding.suggestionsListView.visibility = View.GONE
         }
-
-
-
 
         //eğer sehir aratılmıssa önceden son arama mevcutsa
         if (lastSearchedCity != null) {
@@ -124,10 +113,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
-
-
     private fun updateSuggestions(newText: String) {
         val filteredCities = getRecentCities().filter {
             it.contains(newText, ignoreCase = true)
@@ -142,12 +127,6 @@ class MainActivity : AppCompatActivity() {
             binding.suggestionsListView.visibility = View.GONE
         }
     }
-
-
-
-
-
-
 
     private fun updateRecentCitiesList(cityName: String) {
         val sharedPreferences = getSharedPreferences("WeatherAppPrefs", Context.MODE_PRIVATE)
@@ -175,8 +154,6 @@ class MainActivity : AppCompatActivity() {
             editor.putString("recentCities", cityName)
             editor.apply()
         }
-
-
     }
 
     private fun getRecentCities(): List<String> {
@@ -190,7 +167,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             listOf()
         }
-
 
     }
 
@@ -283,11 +259,10 @@ class MainActivity : AppCompatActivity() {
                         binding.tvPressure.text = "Basınç: ${weatherResponse?.main?.pressure} hPa"
 
                         //veriler gelince layout görünürlüğü aç tv kaldır
-                        binding.weatherData.visibility=View.VISIBLE
-                        binding.tvPromptMessage.visibility=View.GONE
+                        binding.weatherData.visibility = View.VISIBLE
+                        binding.tvPromptMessage.visibility = View.GONE
 
                     }
-
 
                 }
 
@@ -296,5 +271,4 @@ class MainActivity : AppCompatActivity() {
                 }
             })
     }
-
 }

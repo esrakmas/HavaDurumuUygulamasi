@@ -1,20 +1,8 @@
 package com.example.havadurumuuygulamasi
 
-import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
 
-/*
-response içindeki hiyerarşiyi sağladığımız basit yapı
-
-Uzak sunucudan bizlere dönecek json formatındaki verinin
-çeşitli coverterlar yardımı ile cast-map edileceği sınıflar
-
-**/
-
-
-
 data class WeatherResponse(
- //alıcağımız değerler
     val coord: Coord,
     val weather: List<Weather>,
     val base: String,

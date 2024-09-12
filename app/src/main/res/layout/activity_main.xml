@@ -4,10 +4,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="@drawable/day_bg"
-    tools:context=".MainActivity"
-    >
+    android:padding="16dp"
+    tools:context=".MainActivity">
 
     <SearchView
         android:id="@+id/searchView"
@@ -41,15 +40,15 @@
         android:id="@+id/tvPromptMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Henüz bir şehir aramadınız.\nLütfen bir şehir adı girin."
-        android:textSize="16sp"
-        android:textColor="#B2FFFFFF"
+        android:layout_below="@id/searchView"
         android:layout_centerInParent="true"
         android:layout_marginTop="80dp"
-        android:layout_below="@id/searchView"
         android:gravity="center"
         android:lineSpacingExtra="4dp"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:text="Henüz bir şehir aramadınız.\nLütfen bir şehir adı girin."
+        android:textColor="#B2FFFFFF"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:id="@+id/weatherData"
